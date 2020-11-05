@@ -62,18 +62,15 @@ class SceneControll {
 
 		sceneSetDateAndTimeNotes.on("text", ctx => {
 			if(!ctx.message.text) {
-				ctx.reenter()
+				return ctx.scene.reenter()
 			}
 
 			/* this.dataUser.dateAndTime = new Date(ctx.message.text) */
 			const time = setDateAndTimeNote(ctx.message.text)
 			
-			if(!time) {
+			if(!time && !Number(time) ) {
 				ctx.reply("Давай попробуем еще раз...")
-				ctx.reenter()
-			} else if(!Number(time)) {
-				ctx.reply(time)
-				ctx.reenter()
+				return ctx.scene.reenter()
 			}
 
 			const notes = new Notes(this.dataUser)
