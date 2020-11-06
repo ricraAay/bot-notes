@@ -3,9 +3,10 @@ require('dotenv').config()
 const Telegraf = require('telegraf')
 const Stage = require('telegraf/stage')
 const session = require('telegraf/session')
+const Markup = require('telegraf/markup')
 
 const SceneControll = require("./src/scenes")
-const helpCommands = require("./utils/helpCommands")
+const { resize } = require('telegraf/markup')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 
@@ -19,11 +20,15 @@ bot.use(session())
 bot.use(stage.middleware())
 
 bot.start(ctx => {
-	ctx.scene.enter("NotesType")
+	ctx.reply(`${ctx.message.from.first_name}, ну давай начнем 🚀`,
+		Markup.keyboard([
+			["Начать"]
+		]).resize().oneTime().extra()
+	)
 })
 
-bot.help(ctx => {
-	ctx.reply(helpCommands)
+bot.hears("Начать", ctx => {
+	ctx.scene.enter("NotesType")
 })
 
 bot.catch((err, ctx) => {
